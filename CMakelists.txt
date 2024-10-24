@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.6)
+project(gamedb)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g")
+
+# 如果没有设置ARCH那么就设置为x86_64
+if(NOT DEFINED ARCH)
+    set(ARCH x86_64)
+endif()
+
+# 如果没有设置CMAKE_BUILD_TYPE那么就是Debug
+if(NOT DEFINED CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+include_directories("include")
+
+add_subdirectory(src)
+add_subdirectory(tests)
