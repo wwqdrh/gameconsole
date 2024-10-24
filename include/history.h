@@ -3,6 +3,8 @@
 
 #include "collection.h"
 
+namespace gameconsole {
+
 class History : public Collection {
 private:
   std::function<void(const std::string &)> _out;
@@ -48,3 +50,4 @@ public:
     }
   }
 };
+} // namespace gameconsole

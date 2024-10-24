@@ -7,6 +7,7 @@
 #include <variant>
 #include <vector>
 
+namespace gameconsole {
 // 前向声明
 struct VariantArray;
 struct VariantMap;
@@ -32,14 +33,10 @@ struct VariantMap {
   // 接受初始化列表的构造函数
   VariantMap(std::initializer_list<std::pair<Variant, Variant>> init)
       : values(init.begin(), init.end()) {}
-    
-  // []操作符
-  Variant operator[](const Variant &key) const {
-    return values.at(key);
-  }
-};
 
-namespace types {
+  // []操作符
+  Variant operator[](const Variant &key) const { return values.at(key); }
+};
 
 // Forward declarations
 class BaseType;
@@ -341,4 +338,4 @@ public:
   }
 };
 
-} // namespace types
+} // namespace gameconsole

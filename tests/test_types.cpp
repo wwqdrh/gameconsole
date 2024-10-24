@@ -2,7 +2,7 @@
 
 #include "types.h"
 
-using namespace types;
+using namespace gameconsole;
 
 TEST(TypesTest, TestBasicNormal) {
   BoolType b;

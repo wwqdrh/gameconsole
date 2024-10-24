@@ -9,7 +9,7 @@
 
 #include "types.h"
 
-using namespace types;
+namespace gameconsole {
 
 // Forward declaration
 class Collection;
@@ -298,3 +298,5 @@ public:
     return map;
   }
 };
+
+} // namespace gameconsole

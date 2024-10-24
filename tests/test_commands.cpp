@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "commands.h"
+using namespace gameconsole;
 
 TEST(CommandsTest, TestCommand) {
   auto commands = Commands(VariantMap(

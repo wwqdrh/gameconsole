@@ -2,6 +2,8 @@
 
 #include "collection.h"
 
+using namespace gameconsole;
+
 TEST(CollectionTest, TestCRUD) {
   Collection collection;
   bool testResult;

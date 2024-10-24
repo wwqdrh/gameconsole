@@ -8,7 +8,7 @@
 #include <variant>
 #include <vector>
 
-using namespace types;
+namespace gameconsole {
 
 class Command {
 public:
@@ -61,3 +61,4 @@ public:
     });
   }
 };
+} // namespace gameconsole

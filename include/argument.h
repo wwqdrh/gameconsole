@@ -5,8 +5,7 @@
 #include "collection.h"
 #include "types.h"
 
-using namespace types;
-
+namespace gameconsole {
 class Argument {
 private:
   Variant _normalized_value;
@@ -42,3 +41,4 @@ public:
     return ss.str();
   }
 };
+}

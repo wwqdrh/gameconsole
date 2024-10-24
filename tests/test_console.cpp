@@ -6,6 +6,7 @@
 #include "argument.h"
 #include "console.h"
 #include "types.h"
+using namespace gameconsole;
 
 TEST(ConsoleTest, TestConsoleComplete) {
   auto console = Console(

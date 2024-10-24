@@ -12,6 +12,7 @@
 #include <variant>
 #include <vector>
 
+namespace gameconsole {
 class Console {
 private:
   History _history;
@@ -176,3 +177,4 @@ private:
             s.end());
   }
 };
+} // namespace gameconsole

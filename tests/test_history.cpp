@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "history.h"
+using namespace gameconsole;
 
 TEST(HistoryTest, TestHistoryLength) {
   auto history = History([](std::string s) { std::cout << s << std::endl; }, 5);
