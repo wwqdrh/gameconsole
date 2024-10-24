@@ -7,40 +7,19 @@
 #include <variant>
 #include <vector>
 
+#include "types.h"
+
+using namespace types;
+
 // Forward declaration
 class Collection;
 using CollectionPtr = std::shared_ptr<Collection>;
-
-// 前向声明
-struct VariantArray;
-struct VariantMap;
-
-// 使用std::shared_ptr来处理递归类型
-using Variant =
-    std::variant<std::monostate, int, double, bool, std::string,
-                 std::shared_ptr<VariantArray>, std::shared_ptr<VariantMap>>;
-
-// 定义递归类型
-struct VariantArray {
-  std::vector<Variant> values;
-};
-
-struct VariantMap {
-  std::map<Variant, Variant> values;
-
-  // 默认构造函数
-  VariantMap() = default;
-
-  // 接受初始化列表的构造函数
-  VariantMap(std::initializer_list<std::pair<Variant, Variant>> init)
-      : values(init.begin(), init.end()) {}
-};
 
 class Collection {
 public:
   // 使用 std::variant 替代 Godot 的 Variant
 
-private:
+protected:
   std::map<Variant, Variant> _collection;
   int _iterationCurrent = -1;
   int _maxId = 0;

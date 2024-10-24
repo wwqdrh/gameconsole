@@ -5,12 +5,12 @@
 
 class History : public Collection {
 private:
-  std::function<void(std::string)> _out;
+  std::function<void(const std::string &)> _out;
   int max_length = 10;
 
 public:
   History() = default;
-  History(std::function<void(std::string)> out, int max_length = 10)
+  History(std::function<void(const std::string &)> out, int max_length = 10)
       : _out(out), max_length(max_length) {}
 
   void push(const Variant &value) {

@@ -5,6 +5,7 @@
 #include "types.h"
 #include <functional>
 #include <memory>
+#include <variant>
 #include <vector>
 
 using namespace types;
@@ -53,7 +54,10 @@ public:
     return filter([name](const Variant &key, const Variant &value, int index,
                          const Collection &coll) -> bool {
       // 判断是否以name开头
-      return std::get<std::string>(key).find(name) == 0;
+      if (std::holds_alternative<std::string>(key)) {
+        return std::get<std::string>(key).find(name) == 0;
+      }
+      return false;
     });
   }
 };

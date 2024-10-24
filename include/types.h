@@ -1,12 +1,38 @@
 #pragma once
 
+#include <map>
 #include <memory>
 #include <regex>
 #include <string>
 #include <variant>
 #include <vector>
 
-#include "collection.h"
+// 前向声明
+struct VariantArray;
+struct VariantMap;
+class Command;
+
+// 使用std::shared_ptr来处理递归类型
+using Variant =
+    std::variant<std::monostate, int, double, bool, std::string,
+                 std::shared_ptr<VariantArray>, std::shared_ptr<VariantMap>,
+                 std::shared_ptr<Command>>;
+
+// 定义递归类型
+struct VariantArray {
+  std::vector<Variant> values;
+};
+
+struct VariantMap {
+  std::map<Variant, Variant> values;
+
+  // 默认构造函数
+  VariantMap() = default;
+
+  // 接受初始化列表的构造函数
+  VariantMap(std::initializer_list<std::pair<Variant, Variant>> init)
+      : values(init.begin(), init.end()) {}
+};
 
 namespace types {
 
