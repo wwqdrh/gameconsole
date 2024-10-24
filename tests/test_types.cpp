@@ -45,12 +45,12 @@ TEST(TypesTest, TestFilter) {
 }
 
 TEST(TypesTest, TestFactory) {
-  auto any_type = TypeFactory::build(0);
+  auto any_type = TypeFactory::build(ValueType::Any);
   ASSERT_EQ(any_type->toString(), "Any");
 
-  auto bool_type = TypeFactory::build(1);
+  auto bool_type = TypeFactory::build(ValueType::Bool);
   ASSERT_EQ(bool_type->toString(), "Bool");
 
-  auto string_type = TypeFactory::build(4);
+  auto string_type = TypeFactory::build(ValueType::String);
   ASSERT_EQ(string_type->toString(), "String");
 }

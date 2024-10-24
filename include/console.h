@@ -6,6 +6,7 @@
 #include "types.h"
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <regex>
 #include <string>
 #include <variant>
@@ -15,15 +16,34 @@ class Console {
 private:
   History _history;
   Commands _commands;
+  std::function<void(const std::string &)> _out;
   // std::regex _erase_bb_tags_regex;
+  std::regex _regex_command;
 
 public:
   Console(std::function<void(const std::string &)> out)
-      : _history(History(out)) {
+      : _history(History(out)), _out(out) {
     // _erase_bb_tags_regex =
     //     std::regex("\\[[\\/]?[a-z0-9\\=\\#\\ \\_\\-\\,\\.\\;]+\\]");
+    // 正则表达式模式:
+    // ([a-zA-Z]+)    - 捕获命令名(字母组成)
+    // \(             - 左括号
+    // (              - 开始捕获参数组
+    //   [^,)]*       - 匹配除逗号和右括号外的任意字符
+    //   (?:         - 非捕获组开始
+    //     ,         - 逗号
+    //     [^,)]*    - 匹配除逗号和右括号外的任意字符
+    //   )*          - 重复0次或多次
+    // )             - 结束捕获参数组
+    // \)            - 右括号
+    _regex_command = std::regex(R"(([a-zA-Z]+)\(([^,)]*(?:,[^,)]*)*)\))");
   }
 
+  void writen(const std::string &message) {
+    if (_out != nullptr) {
+      _out(message + "\n");
+    }
+  }
   std::optional<std::shared_ptr<Command>> get_command(const std::string &name) {
     std::optional<Variant> val = _commands.get_value(name);
     if (val.has_value()) {
@@ -103,5 +123,56 @@ public:
       cur_prefix += all_prefix_commands[0][idx];
     }
     return cur_prefix;
+  }
+
+  void execute(const std::string &input) {
+    writen("[color=#999999]$[/color] " + input);
+
+    std::smatch matches;
+    if (!std::regex_match(input, matches, _regex_command)) {
+      return;
+    }
+
+    // 提取命令名
+    std::string command = matches[1].str();
+    std::vector<std::string> params;
+    // 提取命令名
+    command = matches[1].str();
+
+    // 提取参数字符串
+    std::string params_str = matches[2].str();
+
+    // 分割参数字符串
+    if (!params_str.empty()) {
+      size_t start = 0;
+      size_t end = 0;
+      while ((end = params_str.find(',', start)) != std::string::npos) {
+        std::string param = params_str.substr(start, end - start);
+        trim(param); // 移除首尾空白
+        params.push_back(param);
+        start = end + 1;
+      }
+      // 添加最后一个参数
+      std::string param = params_str.substr(start);
+      trim(param);
+      params.push_back(param);
+    }
+
+    auto cmd = get_command(command);
+    if (cmd.has_value()) {
+      cmd.value()->execute(params);
+      _history.push(input);
+    }
+  }
+
+private:
+  void trim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+              return !std::isspace(ch);
+            }));
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
+            s.end());
   }
 };

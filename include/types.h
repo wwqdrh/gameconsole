@@ -15,8 +15,8 @@ class Command;
 // 使用std::shared_ptr来处理递归类型
 using Variant =
     std::variant<std::monostate, int, double, bool, std::string,
-                 std::shared_ptr<VariantArray>, std::shared_ptr<VariantMap>,
-                 std::shared_ptr<Command>>;
+                 std::vector<std::string>, std::shared_ptr<VariantArray>,
+                 std::shared_ptr<VariantMap>, std::shared_ptr<Command>>;
 
 // 定义递归类型
 struct VariantArray {
@@ -32,6 +32,11 @@ struct VariantMap {
   // 接受初始化列表的构造函数
   VariantMap(std::initializer_list<std::pair<Variant, Variant>> init)
       : values(init.begin(), init.end()) {}
+    
+  // []操作符
+  Variant operator[](const Variant &key) const {
+    return values.at(key);
+  }
 };
 
 namespace types {
@@ -52,6 +57,18 @@ class Vector3Type;
 
 // Check result enum
 enum class CheckResult { Ok, Failed, Canceled };
+
+enum class ValueType {
+  Any,
+  String,
+  Int,
+  Float,
+  Bool,
+  Filter,
+  Vector2,
+  Vector3,
+  Regex
+};
 
 // Base class for all types
 class BaseType {
@@ -300,22 +317,24 @@ public:
 // Factory for creating type instances
 class TypeFactory {
 public:
-  static std::shared_ptr<BaseType> build(int type) {
+  static std::shared_ptr<BaseType> build(ValueType type) {
     switch (type) {
-    case 0:
+    case ValueType::Any:
       return std::make_shared<AnyType>();
-    case 1:
+    case ValueType::Bool:
       return std::make_shared<BoolType>();
-    case 2:
+    case ValueType::Int:
       return std::make_shared<IntType>();
-    case 3:
+    case ValueType::Float:
       return std::make_shared<FloatType>();
-    case 4:
+    case ValueType::String:
       return std::make_shared<StringType>();
-    case 5:
+    case ValueType::Vector2:
       return std::make_shared<Vector2Type>();
-    case 7:
+    case ValueType::Vector3:
       return std::make_shared<Vector3Type>();
+    case ValueType::Regex:
+      return std::make_shared<RegexType>();
     default:
       return std::make_shared<BaseType>();
     }

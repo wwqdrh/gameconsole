@@ -20,7 +20,7 @@ public:
 public:
   Argument() = default;
 
-  Argument(const std::string &p_name, int p_type,
+  Argument(const std::string &p_name, ValueType p_type,
            const std::string &p_description)
       : name(p_name), type_(TypeFactory::build(p_type)),
         description(p_description) {}
