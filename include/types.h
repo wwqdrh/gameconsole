@@ -146,7 +146,7 @@ public:
                                std::is_floating_point_v<T>) {
             return std::to_string(arg);
           } else {
-            throw std::runtime_error("Unsupported type");
+            return "";
           }
         },
         value);
